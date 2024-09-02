@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master  # Change this to your default branch
+      - master  # Adjust as per your repository
   pull_request:
     branches:
-      - master  # Run the workflow for pull requests to the main branch
+      - master
 
 jobs:
   build:
@@ -14,46 +14,29 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Updated to the latest version
+        uses: actions/checkout@v4  # Ensure it's the latest version
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3  # Updated to the latest version
+        uses: docker/setup-buildx-action@v3  # Ensure it's the latest version
 
       - name: Login to DockerHub
-        uses: docker/login-action@v3  # Updated to the latest version
+        uses: docker/login-action@v3  # Ensure it's the latest version
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}  # Use the updated DockerHub username
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}  # Use the updated DockerHub access token
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and push backend image
-        uses: docker/build-push-action@v5  # Latest version
+        uses: docker/build-push-action@v5  # Ensure it's the latest version
         with:
-          context: ./backend  # Directory where the Dockerfile for backend is located
-          file: ./backend/Dockerfile  # Dockerfile path for backend
+          context: ./backend  # Directory of the backend Dockerfile
+          file: ./backend/Dockerfile  # Dockerfile path for the backend
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/backend:latest
 
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5  # Latest version
+        uses: docker/build-push-action@v5  # Ensure it's the latest version
         with:
-          context: ./frontend  # Directory where the Dockerfile for frontend is located
-          file: ./frontend/Dockerfile  # Dockerfile path for frontend
+          context: ./frontend  # Directory of the frontend Dockerfile
+          file: ./frontend/Dockerfile  # Dockerfile path for the frontend
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/frontend:latest
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Deploy using Docker Compose
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /path/to/your/deployment  # Replace with your actual path on the server
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d
