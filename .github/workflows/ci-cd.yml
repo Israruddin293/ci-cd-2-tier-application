@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Change this to your default branch
+      - master  # Change this to your default branch
   pull_request:
     branches:
-      - main  # Run the workflow for pull requests to the main branch
+      - master  # Run the workflow for pull requests to the main branch
 
 jobs:
   build:
