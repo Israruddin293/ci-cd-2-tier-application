@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master  # Change this to your default branch
+      - main  # Change this to your default branch
   pull_request:
     branches:
-      - master  # Run the workflow for pull requests to the main branch
+      - main  # Run the workflow for pull requests to the main branch
 
 jobs:
   build:
@@ -14,19 +14,19 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Updated to the latest version
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3  # Updated to the latest version
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3  # Updated to the latest version
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}  # Add your DockerHub username to Secrets
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}  # Add your DockerHub access token to Secrets
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}  # Use the updated DockerHub username
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}  # Use the updated DockerHub access token
 
       - name: Build and push backend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v5  # Latest version
         with:
           context: ./backend  # Directory where the Dockerfile for backend is located
           file: ./backend/Dockerfile  # Dockerfile path for backend
@@ -34,7 +34,7 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/backend:latest
 
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v5  # Latest version
         with:
           context: ./frontend  # Directory where the Dockerfile for frontend is located
           file: ./frontend/Dockerfile  # Dockerfile path for frontend
