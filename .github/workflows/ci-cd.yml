@@ -48,10 +48,10 @@ jobs:
     steps:
       - name: Deploy using Docker Compose
         uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+        # with:
+        #   host: ${{ secrets.REMOTE_HOST }}
+        #   username: ${{ secrets.REMOTE_USER }}
+        #   key: ${{ secrets.SSH_PRIVATE_KEY }} 
           script: |
             cd /home/alpha/Desktop/2_Tyre_Application  # Replace with your actual path on the server
             docker-compose down
